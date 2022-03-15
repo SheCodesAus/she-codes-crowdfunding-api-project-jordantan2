@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Project, Pledge
+
+
 class PledgeSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     amount = serializers.IntegerField()
@@ -19,6 +21,7 @@ class ProjectSerializer(serializers.Serializer):
     image = serializers.URLField()
     is_open = serializers.BooleanField()
     date_created = serializers.CharField(max_length=200)
+    owner = serializers.ReadOnlyField(source='owner.id')
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)

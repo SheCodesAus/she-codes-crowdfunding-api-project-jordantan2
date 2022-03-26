@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Pledge
+from .models import Project, Project_Product
 
 
 class PledgeSerializer(serializers.Serializer):
@@ -11,7 +11,7 @@ class PledgeSerializer(serializers.Serializer):
     project_id = serializers.IntegerField()
 
     def create(self, validated_data):
-        return Pledge.objects.create(**validated_data)
+        return Project_Product.objects.create(**validated_data)
 
 class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()

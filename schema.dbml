@@ -1,0 +1,52 @@
+table users as U {
+  id int [pk, increment]
+  username varchar
+  email varchar
+  password varchar
+  image varchar
+}
+
+table category as Cat {
+  id int [pk, increment]
+  name varchar
+  slug varchar
+}
+
+table project as Prj {
+  id int [pk, increment]
+  title varchar
+  desc varchar
+  image varchar
+  category int [ref: > Cat.id]
+  owner int [ref: > U.id] 
+  start_date datetime
+  end_date datetime
+  created_at datetime [default:`now()`]
+  modified_at datetime [default:`now()`]
+  
+}
+
+table project_product as Pp {
+  id int [pk, increment]
+  project int [ref: > Prj.id]
+  product int [ref: > Prod.id]
+  purchased_by int [ref: > U.id] 
+  purchased_date datetime 
+  anonymous boolean [default: false]
+  created_at datetime [default:`now()`]
+  modified_at datetime [default:`now()`]
+  Indexes {
+    (project, product) [unique]
+    id [unique]
+  }
+}
+
+table product as Prod {
+  id int [pk, increment]
+  name varchar 
+  amount double
+  image varchar
+  gtin str
+  created_at datetime [default:`now()`]
+  modified_at datetime [default:`now()`]
+}

@@ -1,36 +1,60 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-# Create your models here.
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        abstract = True
 
 
-class Project(models.Model):
+class Project(BaseModel):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    goal = models.IntegerField()
     image = models.URLField()
-    is_open = models.BooleanField()
-    date_created = models.DateTimeField()
-    # owner = models.CharField(max_length=200)
+    category = models.ForeignKey(
+        'Category',
+        on_delete=models.CASCADE,
+        related_name='Project'
+    )
+    # category = models.CategoryField()
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
         related_name='owner_projects'
     )
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
 
 
-class Pledge(models.Model):
-    amount = models.IntegerField()
-    comment = models.CharField(max_length=200)
-    anonymous = models.BooleanField()
+
+class Project_Product(BaseModel):
     project = models.ForeignKey(
         'Project',
         on_delete=models.CASCADE,
-        related_name='pledges'
+        related_name='project_product'
     )
-    # supporter = models.CharField(max_length=200)
-    supporter = models.ForeignKey(
+    product = models.ForeignKey(
+        'Product',
+        on_delete=models.CASCADE,
+        related_name='product'
+    )
+    purchased_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
-        related_name='supporter_pledges'
+        related_name='owner_project_product'
     )
+    purchased_date = models.DateTimeField()
+    anonymous = models.BooleanField()
+    comment = models.CharField(max_length=200)
+
+class Category(BaseModel):
+    name = models.CharField(max_length=200)
+    slug = models.SlugField()
+
+
+class Product(BaseModel):
+    name = models.CharField(max_length=200)
+    amount = models.IntegerField()
+    image = models.CharField(max_length=200)
+    gtin = models.CharField(max_length=200)

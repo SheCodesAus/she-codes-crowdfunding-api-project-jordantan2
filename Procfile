@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath she-codes-crowdfunding-api-project-jordantan2 crowdfunding.wsgi --log-file -
+web: gunicorn --pythonpath crowdfunding crowdfunding.wsgi --log-file -
